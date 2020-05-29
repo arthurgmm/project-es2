@@ -1,14 +1,18 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const Home = () => {
+const Home = ({ navigation }) => {
+  function navigateToNovo(){
+    navigation.navigate('Novo');
+  }  
+  
   return (
     <View style={styles.container}>
         <Text style={styles.title}>
           X9
           <Text style={{color: '#1076F7'}}>App</Text>
         </Text>
-      <TouchableOpacity style={styles.homeButton}>
+      <TouchableOpacity style={styles.homeButton} onPress={navigateToNovo}>
         <Text style={styles.buttonText}>Novo Registro</Text>
       </TouchableOpacity>  
       <TouchableOpacity style={styles.homeButton}>
