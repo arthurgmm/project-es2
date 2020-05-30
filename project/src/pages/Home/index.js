@@ -32,16 +32,16 @@ const styles = StyleSheet.create({
     color: '#21243D',
     fontWeight: 'bold',
     fontSize: 50,
-    marginBottom: 130
+    marginBottom: 180
   },
   homeButton: {
-    backgroundColor: '#7159C1',
-    width: '80%',
+    backgroundColor: '#FF7C7C',
+    borderRadius: 20,
     height: 45,
-    margin: 10,
+    width: '80%',
+    marginBottom: 30,
     justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 20
+    alignItems: 'center'
   },
   buttonText: {
     color: '#FFF'

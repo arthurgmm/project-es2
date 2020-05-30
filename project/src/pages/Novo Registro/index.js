@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Geolocation from '@react-native-community/geolocation';
 
 const NovoRegistro = ({ navigation }) => {
@@ -32,13 +33,29 @@ const NovoRegistro = ({ navigation }) => {
             style={styles.input}
             placeholder='Identificador'
           />
-          <Text>Data: {date}</Text>
-          <Text>Hora: {hour}</Text>
-          <Text>Latitude: {latitude}</Text>
-          <Text>Longitude: {longitude}</Text>
-          <View style={styles.registroButton}>
-            <TouchableOpacity style={styles.videoButton} onPress={navigateToVideo}>
-              <Text style={styles.videoText}>Vídeo</Text>
+          <TextInput 
+            style={styles.input}
+            value={date}
+            editable={false}
+          />
+          <TextInput 
+            style={styles.input}
+            value={hour}
+            editable={false}
+          />
+          <TextInput 
+            style={styles.input}
+            value={latitude}
+            editable={false}
+          /> 
+          <TextInput 
+            style={styles.input}
+            value={longitude}
+            editable={false}
+          />                                    
+          <View style={styles.registroButtons}>
+            <TouchableOpacity onPress={navigateToVideo}>
+              <Icon name='rocket' size={30} color='#900' />
             </TouchableOpacity>             
           </View>
         </View>
@@ -58,7 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     padding: 10,
-    backgroundColor: '#7159C1',
+    backgroundColor: '#FF7C7C',
   },
   title: {
     fontSize: 23,
@@ -67,9 +84,9 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    marginTop: 10,
   },
   input: {
     height: 50,
@@ -78,27 +95,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
+    marginTop: 30,
     backgroundColor: '#FAFAFA',
     marginBottom: 20,
     fontSize: 20,    
   },
-  registroButton: {
+  registroButtons: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',    
   },
-  videoButton: {
-    backgroundColor: '#7159C1',
-    width: '30%',
-    height: 45,
-    margin: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 20
-  },
-  videoText: {
-    color: '#FFF'
-  }
 });
 
 export default NovoRegistro;
