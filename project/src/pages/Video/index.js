@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RNCamera } from 'react-native-camera';
 
 const Video = () => {
@@ -10,7 +11,7 @@ const Video = () => {
     if(camera) {
       if(!isRecording){
         setIsRecording(true);
-        data = await camera.recordAsync();
+        const data = await camera.recordAsync();
         setCapturedRecord(data.uri);
       } else {
         setIsRecording(false);
@@ -40,12 +41,13 @@ const Video = () => {
           buttonPositive: 'Ok',
           buttonNegative: 'Cancel',
         }}
-      />
+      >
       <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
         <TouchableOpacity onPress={record} style={styles.capture}>
-          <Text style={{ fontSize: 14 }}> SNAP </Text>
+          <Icon name='record-rec' size={80} style={[isRecording ? styles.recTrue : styles.recFalse]}/>
         </TouchableOpacity>
       </View>
+      </RNCamera>
     </View>
   )
 }
@@ -54,7 +56,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#7159C1',
   },
   preview: {
     flex: 1,
@@ -63,13 +64,18 @@ const styles = StyleSheet.create({
   },
   capture: {
     flex: 0,
-    backgroundColor: '#fff',
     borderRadius: 5,
     padding: 15,
     paddingHorizontal: 20,
     alignSelf: 'center',
-    margin: 20,
+    margin: 5,
   },
+  recTrue: {
+    color: 'red',
+  },
+  recFalse: {
+    color: '#FFF',
+  }
 })
 
 export default Video;

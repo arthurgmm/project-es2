@@ -45,18 +45,24 @@ const NovoRegistro = ({ navigation }) => {
           />
           <TextInput 
             style={styles.input}
-            value={latitude}
+            value={`${latitude} (Latitude)`}
             editable={false}
           /> 
           <TextInput 
             style={styles.input}
-            value={longitude}
+            value={`${longitude} (Longitude)`}
             editable={false}
           />                                    
           <View style={styles.registroButtons}>
             <TouchableOpacity onPress={navigateToVideo}>
-              <Icon name='rocket' size={30} color='#900' />
-            </TouchableOpacity>             
+              <Icon name='video-camera' size={40} color='#000'/>
+            </TouchableOpacity> 
+            <TouchableOpacity>
+              <Icon name='microphone' size={40} color='#000'/>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Icon name='check' size={40} color='#000'/>
+            </TouchableOpacity>                                    
           </View>
         </View>
       </View>
@@ -102,8 +108,11 @@ const styles = StyleSheet.create({
   },
   registroButtons: {
     width: '100%',
+    marginTop: 10,
     justifyContent: 'center',
-    alignItems: 'center',    
+    alignItems: 'center',   
+    flexDirection: 'row', 
+    justifyContent: 'space-around',
   },
 });
 
