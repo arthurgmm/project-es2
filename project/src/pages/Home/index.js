@@ -9,8 +9,8 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
         <Text style={styles.title}>
-          X9
-          <Text style={{color: '#1076F7'}}>App</Text>
+          Project
+          <Text style={{color: '#1076F7'}}>Name</Text>
         </Text>
       <TouchableOpacity style={styles.homeButton} onPress={navigateToNovo}>
         <Text style={styles.buttonText}>Novo Registro</Text>
