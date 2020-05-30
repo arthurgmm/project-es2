@@ -14,7 +14,9 @@ const NovoRegistro = ({ navigation }) => {
       pos => {
         setLatitude(JSON.stringify(pos.coords.latitude))
         setLongitude(JSON.stringify(pos.coords.longitude))
-      }
+      },
+      (error) => alert(error.message),
+      { enableHighAccuracy: false, timeout: 5000 }
     );  
   }, []);
 
