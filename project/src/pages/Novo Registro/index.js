@@ -17,6 +17,10 @@ const NovoRegistro = ({ navigation }) => {
     );  
   }, []);
 
+  function navigateToVideo(){
+    navigation.navigate('Video');
+  }    
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -33,7 +37,7 @@ const NovoRegistro = ({ navigation }) => {
           <Text>Latitude: {latitude}</Text>
           <Text>Longitude: {longitude}</Text>
           <View style={styles.registroButton}>
-            <TouchableOpacity style={styles.videoButton}>
+            <TouchableOpacity style={styles.videoButton} onPress={navigateToVideo}>
               <Text style={styles.videoText}>Vídeo</Text>
             </TouchableOpacity>             
           </View>
