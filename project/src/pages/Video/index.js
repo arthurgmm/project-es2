@@ -29,7 +29,6 @@ const Video = ({ navigation }) => {
         setIsRecording(false);
         camera.stopRecording();
         setOpen(true);
-        console.log(capturedRecord.uri);
       }
     }
   };  

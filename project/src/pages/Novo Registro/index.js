@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Geolocation from '@react-native-community/geolocation';
+import { openDatabase } from 'react-native-sqlite-storage';
+
+var db = openDatabase({ name: 'RegistrosDatabase.db' });
 
 const NovoRegistro = ({ navigation }) => {
   const [date, setDate] = useState(`${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()}`)
   const [hour, setHour] = useState(`${new Date().getHours()}:${new Date().getMinutes()}`)
   const [latitude, setLatitude] = useState('Buscando...');
   const [longitude, setLongitude] = useState('Buscando...');
+  const [id, setId] = useState('');
+
+  const [registro, setRegistro] = useState({
+    identificador: id,
+    data: date,
+    hora: hour,
+    latitude: latitude,
+    longitude: longitude,
+    saved: false,  
+  });
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -20,9 +33,39 @@ const NovoRegistro = ({ navigation }) => {
     );  
   }, []);
 
+  useEffect(() => {
+    if(registro.saved){
+      db.transaction(function(tx) {
+        tx.executeSql(
+          'INSERT INTO table_register (register_identificador, register_date, register_hour, register_lat, register_long) VALUES (?,?,?,?,?)',
+          [id, date, hour, latitude, longitude],
+          (tx, results) => {
+            console.log('Results', results.rowsAffected);
+            if (results.rowsAffected > 0) {
+              Alert.alert(
+                'Successo',
+                'Registro feito com sucesso',
+                [
+                  {
+                    text: 'Ok',
+                    onPress: () =>
+                      navigation.navigate('Home'),
+                  },
+                ],
+                { cancelable: false }
+              );
+            } else {
+              alert('Falha no registro');
+            }
+          }
+        );
+      });          
+    }
+  }, [registro])
+
   function navigateToVideo(){
     navigation.navigate('Video');
-  }    
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -33,6 +76,8 @@ const NovoRegistro = ({ navigation }) => {
         <View style={styles.body}>
           <TextInput 
             style={styles.input}
+            onChangeText={(texto) => setId(texto)}
+            value={id}
             placeholder='Identificador'
           />
           <TextInput 
@@ -62,7 +107,16 @@ const NovoRegistro = ({ navigation }) => {
             <TouchableOpacity>
               <Icon name='microphone' size={40} color='#000'/>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                                              setRegistro({
+                                                identificador: id,
+                                                data: date,
+                                                hora: hour,
+                                                latitude: latitude,
+                                                longitude: longitude,
+                                                saved: true,      
+                                              })
+            }}>
               <Icon name='check' size={40} color='#000'/>
             </TouchableOpacity>                                    
           </View>
@@ -94,7 +148,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%',
-    marginTop: 10,
+    marginTop: 5,
   },
   input: {
     height: 50,
