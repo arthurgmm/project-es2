@@ -64,7 +64,10 @@ const NovoRegistro = ({ navigation }) => {
   }, [registro])
 
   function navigateToVideo(){
-    navigation.navigate('Video');
+    navigation.navigate('Video', {
+      date,
+      hour,
+    });
   }
 
   return (

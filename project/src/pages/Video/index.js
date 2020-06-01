@@ -4,15 +4,17 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RNCamera } from 'react-native-camera';
 import Share from 'react-native-share';
 
-const Video = ({ navigation }) => {
+const Video = ({ navigation, route }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [capturedRecord, setCapturedRecord] = useState(null);
-  const [open, setOpen] = useState(null);    
+  const [open, setOpen] = useState(null);
+  
+  const { date, hour } = route.params;
 
   const onShare = () => {
     const options = Platform.select({
       android: {
-        message: 'test message (2)',
+        message: `Registro de aglomeração em ${date} às ${hour} horas`,
         url: capturedRecord.uri,
       }
     })
