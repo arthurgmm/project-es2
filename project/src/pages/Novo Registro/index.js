@@ -70,6 +70,13 @@ const NovoRegistro = ({ navigation }) => {
     });
   }
 
+  function navigateToAudio(){
+    navigation.navigate('Audio', {
+      date,
+      hour,
+    })
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -105,10 +112,10 @@ const NovoRegistro = ({ navigation }) => {
           />                                    
           <View style={styles.registroButtons}>
             <TouchableOpacity onPress={navigateToVideo}>
-              <Icon name='video-camera' size={40} color='#000'/>
+              <Icon name='video-camera' size={40} color='#21243D'/>
             </TouchableOpacity> 
-            <TouchableOpacity>
-              <Icon name='microphone' size={40} color='#000'/>
+            <TouchableOpacity onPress={navigateToAudio}>
+              <Icon name='microphone' size={40} color='#21243D'/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
                                               setRegistro({
@@ -120,7 +127,7 @@ const NovoRegistro = ({ navigation }) => {
                                                 saved: true,      
                                               })
             }}>
-              <Icon name='check' size={40} color='#000'/>
+              <Icon name='check' size={40} color='#21243D'/>
             </TouchableOpacity>                                    
           </View>
         </View>
@@ -140,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     padding: 10,
-    backgroundColor: '#FF7C7C',
+    backgroundColor: '#21243D',
   },
   title: {
     fontSize: 23,

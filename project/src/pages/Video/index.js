@@ -58,7 +58,7 @@ const Video = ({ navigation, route }) => {
       >
       <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
         <TouchableOpacity onPress={record} style={styles.capture}>
-          <Icon name='record-rec' size={80} style={[isRecording ? styles.recTrue : styles.recFalse]}/>
+          <Icon name='record-rec' size={95} style={[isRecording ? styles.recTrue : styles.recFalse]}/>
         </TouchableOpacity>
       </View>
       </RNCamera>
@@ -70,16 +70,16 @@ const Video = ({ navigation, route }) => {
           visible={open}
         >
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-          <TouchableOpacity style={styles.shareButton} onPress={onShare}>
-            <Text style={styles.shareText}>Compartilhar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.shareButton} onPress={() => {
-                                                                        setOpen(false)
-                                                                        navigation.goBack()
-                                                                      }}
-          >
-            <Text style={styles.shareText}>Cancelar</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.shareButton} onPress={onShare}>
+              <Text style={styles.shareText}>Compartilhar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.shareButton} onPress={() => {
+                                                                          setOpen(false)
+                                                                          navigation.goBack()
+                                                                        }}
+            >
+              <Text style={styles.shareText}>Cancelar</Text>
+            </TouchableOpacity>
           </View>
         </Modal>
       }
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   shareButton: {
-    backgroundColor: '#FF7C7C',
+    backgroundColor: '#21243D',
     borderRadius: 20,
     height: 45,
     width: '80%',

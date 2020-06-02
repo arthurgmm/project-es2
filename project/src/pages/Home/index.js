@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title: {
     color: '#21243D',
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     marginBottom: 180
   },
   homeButton: {
-    backgroundColor: '#FF7C7C',
+    backgroundColor: '#21243D',
     borderRadius: 20,
     height: 45,
     width: '80%',
