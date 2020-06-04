@@ -9,12 +9,12 @@ const Video = ({ navigation, route }) => {
   const [capturedRecord, setCapturedRecord] = useState(null);
   const [open, setOpen] = useState(null);
   
-  const { date, hour } = route.params;
+  const {id, date, hour, latitude, longitude } = route.params;
 
   const onShare = () => {
     const options = Platform.select({
       android: {
-        message: `Registro de aglomeração em ${date} às ${hour} horas`,
+        message: `${id} registrado(a) na localização ${latitude} - ${longitude} no dia ${date} às ${hour} horas`,
         url: capturedRecord.uri,
       }
     })

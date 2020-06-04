@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 23,
     color: '#FFF',
+    fontWeight: 'bold',
   },  
   registerContainer: {
     backgroundColor: '#FFF',
