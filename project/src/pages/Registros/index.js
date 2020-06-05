@@ -52,7 +52,6 @@ const Registros = () => {
 
   useEffect(() => {
     if(deleteId){
-      console.log('entrei')
       db.transaction(tx => {
         tx.executeSql(
           'DELETE FROM  table_register where register_id=?',
