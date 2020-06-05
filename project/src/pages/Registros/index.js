@@ -6,10 +6,11 @@ import { openDatabase } from 'react-native-sqlite-storage';
 
 var db = openDatabase({ name: 'RegistrosDatabase.db' });
 
-const Registros = ({ navigation }) => {
+const Registros = () => {
   const [list, setList] = useState([]);
   const [open, setOpen] = useState(null);
   const [updateId, setUpdateId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
   const [newId, setNewId] = useState({
     id: '',
     saved: false,  
@@ -48,6 +49,36 @@ const Registros = ({ navigation }) => {
       });              
     }
   }, [newId])  
+
+  useEffect(() => {
+    if(deleteId){
+      console.log('entrei')
+      db.transaction(tx => {
+        tx.executeSql(
+          'DELETE FROM  table_register where register_id=?',
+          [deleteId],
+          (tx, results) => {
+            console.log('Results', results.rowsAffected);
+            if (results.rowsAffected > 0) {
+              Alert.alert(
+                'Successo',
+                'O registro foi excluído',
+                [
+                  {
+                    text: 'Ok',
+                    onPress: () => setUpdateId(null),
+                  },
+                ],
+                { cancelable: false }
+              );
+            } else {
+              Alert.alert('Falha na remoção');
+            }
+          }
+        );
+      });      
+    }
+  }, [deleteId])
   
   return (
     <View style={styles.container}>
@@ -68,11 +99,14 @@ const Registros = ({ navigation }) => {
               <TouchableOpacity style={styles.editButton} onPress={() => { 
                                                                     setUpdateId(item.register_id)
                                                                     setOpen(true)                                      
-                                                                   }}
+                                                                  }}
               >
                 <Icon1 name='edit' size={23} color='#000'/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.deleteButton}>
+              <TouchableOpacity style={styles.deleteButton} onPress={() => {
+                                                                      setDeleteId(item.register_id)
+                                                                    }}
+              >
                 <Icon2 name='delete' size={23} color='#000'/>
               </TouchableOpacity>              
             </View>
