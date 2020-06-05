@@ -17,6 +17,7 @@
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.5.0",
     "@react-navigation/stack": "^5.4.1",
+    "fbjs": "^1.0.0",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-camera": "^3.26.0",
