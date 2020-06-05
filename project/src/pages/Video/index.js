@@ -83,6 +83,7 @@ const Video = ({ navigation, route }) => {
           </View>
         </Modal>
       }
+      
     </View>
   )
 }
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   shareText: {
+    fontWeight: 'bold',
     color: '#FFF'
   }
 })
