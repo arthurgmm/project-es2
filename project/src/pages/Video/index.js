@@ -9,12 +9,12 @@ const Video = ({ navigation, route }) => {
   const [capturedRecord, setCapturedRecord] = useState(null);
   const [open, setOpen] = useState(null);
   
-  const { date, hour } = route.params;
+  const {id, date, hour, latitude, longitude } = route.params;
 
   const onShare = () => {
     const options = Platform.select({
       android: {
-        message: `Registro de aglomeração em ${date} às ${hour} horas`,
+        message: `${id} registrado(a) na localização ${latitude}/${longitude} no dia ${date} às ${hour} horas.`,
         url: capturedRecord.uri,
       }
     })
@@ -44,14 +44,14 @@ const Video = ({ navigation, route }) => {
         style={styles.preview}
         type={RNCamera.Constants.Type.back}
         androidCameraPermissionOptions={{
-          title: 'Permission to use camera',
-          message: 'We need your permission to use your camera',
+          title: 'Permissão para uso da câmera',
+          message: 'Precisamos da sua permissão para o uso da câmera',
           buttonPositive: 'Ok',
           buttonNegative: 'Cancel',
         }}
         androidRecordAudioPermissionOptions={{
-          title: 'Permission to use audio recording',
-          message: 'We need your permission to use your audio',
+          title: 'Permissão para gravação de áudio',
+          message: 'Precisamos da sua permissão para gravação de áudio',
           buttonPositive: 'Ok',
           buttonNegative: 'Cancel',
         }}
@@ -83,6 +83,7 @@ const Video = ({ navigation, route }) => {
           </View>
         </Modal>
       }
+      
     </View>
   )
 }
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   shareText: {
+    fontWeight: 'bold',
     color: '#FFF'
   }
 })

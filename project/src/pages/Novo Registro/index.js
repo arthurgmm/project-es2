@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback,
+         Keyboard, Alert, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Geolocation from '@react-native-community/geolocation';
 import { openDatabase } from 'react-native-sqlite-storage';
@@ -65,16 +66,12 @@ const NovoRegistro = ({ navigation }) => {
 
   function navigateToVideo(){
     navigation.navigate('Video', {
+      id,
       date,
       hour,
+      latitude,
+      longitude
     });
-  }
-
-  function navigateToAudio(){
-    navigation.navigate('Audio', {
-      date,
-      hour,
-    })
   }
 
   return (
@@ -84,39 +81,38 @@ const NovoRegistro = ({ navigation }) => {
           <Text style={styles.title}>Novo Registro</Text>
         </View>
         <View style={styles.body}>
-          <TextInput 
-            style={styles.input}
-            onChangeText={(texto) => setId(texto)}
-            value={id}
-            placeholder='Identificador'
-          />
-          <TextInput 
-            style={styles.input}
-            value={date}
-            editable={false}
-          />
-          <TextInput 
-            style={styles.input}
-            value={hour}
-            editable={false}
-          />
-          <TextInput 
-            style={styles.input}
-            value={`${latitude} (Latitude)`}
-            editable={false}
-          /> 
-          <TextInput 
-            style={styles.input}
-            value={`${longitude} (Longitude)`}
-            editable={false}
-          />                                    
+          <View style={styles.registroInputs}>
+            <TextInput 
+              style={styles.input}
+              onChangeText={(texto) => setId(texto)}
+              value={id}
+              placeholder='Identificador'
+            />
+            <TextInput 
+              style={styles.input}
+              value={date}
+              editable={false}
+            />
+            <TextInput 
+              style={styles.input}
+              value={hour}
+              editable={false}
+            />
+            <TextInput 
+              style={styles.input}
+              value={`${latitude} (Latitude)`}
+              editable={false}
+            /> 
+            <TextInput 
+              style={styles.input}
+              value={`${longitude} (Longitude)`}
+              editable={false}
+            />     
+          </View>                               
           <View style={styles.registroButtons}>
             <TouchableOpacity onPress={navigateToVideo}>
               <Icon name='video-camera' size={40} color='#21243D'/>
             </TouchableOpacity> 
-            <TouchableOpacity onPress={navigateToAudio}>
-              <Icon name='microphone' size={40} color='#21243D'/>
-            </TouchableOpacity>
             <TouchableOpacity onPress={() => {
                                               setRegistro({
                                                 identificador: id,
@@ -152,13 +148,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 23,
     color: '#FFF',
+    fontWeight: 'bold'
   },
   body: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%',
-    marginTop: 5,
+  },
+  registroInputs: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
   },
   input: {
     height: 50,
@@ -169,12 +170,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 30,
     backgroundColor: '#FAFAFA',
-    marginBottom: 20,
     fontSize: 20,    
   },
   registroButtons: {
     width: '100%',
-    marginTop: 10,
+    height: '35%',
     justifyContent: 'center',
     alignItems: 'center',   
     flexDirection: 'row', 

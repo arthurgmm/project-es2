@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: '#FFF'
+    color: '#FFF',
+    fontWeight: 'bold'
   }
 })
 
