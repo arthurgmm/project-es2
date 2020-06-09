@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, 
+         Text, 
+         TouchableOpacity, 
+         StyleSheet } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 
 var db = openDatabase({ name: 'RegistrosDatabase.db' });
