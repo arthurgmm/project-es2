@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, Modal, Alert, StyleSheet } from 'react-native';
+import { View,
+         Text, 
+         TextInput, 
+         FlatList, 
+         TouchableOpacity, 
+         Modal, 
+         Alert, 
+         StyleSheet } from 'react-native';
 import Icon1 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import { openDatabase } from 'react-native-sqlite-storage';
