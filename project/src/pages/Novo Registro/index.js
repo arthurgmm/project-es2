@@ -10,6 +10,7 @@ import { View,
         } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Geolocation from '@react-native-community/geolocation';
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import { openDatabase } from 'react-native-sqlite-storage';
 
 var db = openDatabase({ name: 'RegistrosDatabase.db' });
@@ -31,6 +32,19 @@ const NovoRegistro = ({ navigation }) => {
   });
 
   useEffect(() => {
+    RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
+    .then(data => {
+      if (data === "already-enabled") {
+        findCoordinates()
+      } else {
+        setTimeout(() => {
+          findCoordinates()
+        }, 1000)
+      }
+    })    
+  }, []);
+  
+  findCoordinates = () => {
     Geolocation.getCurrentPosition(
       pos => {
         setLatitude(JSON.stringify(pos.coords.latitude))
@@ -39,7 +53,7 @@ const NovoRegistro = ({ navigation }) => {
       (error) => alert(error.message),
       { enableHighAccuracy: false, timeout: 5000 }
     );  
-  }, []);
+  }    
 
   useEffect(() => {
     if(registro.saved){
