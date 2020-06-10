@@ -5,15 +5,12 @@ import { View,
          TouchableOpacity, 
          TouchableWithoutFeedback,
          Keyboard, 
-         Alert, 
          StyleSheet 
         } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Geolocation from '@react-native-community/geolocation';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
-import { openDatabase } from 'react-native-sqlite-storage';
-
-var db = openDatabase({ name: 'RegistrosDatabase.db' });
+import { insertRegister } from './../../DataBase';
 
 const NovoRegistro = ({ navigation }) => {
   const [date, setDate] = useState(`${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()}`)
@@ -57,31 +54,7 @@ const NovoRegistro = ({ navigation }) => {
 
   useEffect(() => {
     if(registro.saved){
-      db.transaction(function(tx) {
-        tx.executeSql(
-          'INSERT INTO table_register (register_identificador, register_date, register_hour, register_lat, register_long) VALUES (?,?,?,?,?)',
-          [id, date, hour, latitude, longitude],
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-            if (results.rowsAffected > 0) {
-              Alert.alert(
-                'Successo',
-                'Registro feito com sucesso',
-                [
-                  {
-                    text: 'Ok',
-                    onPress: () =>
-                      navigation.navigate('Home'),
-                  },
-                ],
-                { cancelable: false }
-              );
-            } else {
-              alert('Falha no registro');
-            }
-          }
-        );
-      });          
+      insertRegister(id,date,hour,latitude,longitude,navigation);            
     }
   }, [registro])
 

@@ -5,10 +5,11 @@ import { View,
          FlatList, 
          TouchableOpacity, 
          Modal, 
-         Alert, 
          StyleSheet } from 'react-native';
 import Icon1 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import { updateRegister } from './../../DataBase';
+import { deleteRegister } from './../../DataBase';
 import { openDatabase } from 'react-native-sqlite-storage';
 
 var db = openDatabase({ name: 'RegistrosDatabase.db' });
@@ -22,7 +23,7 @@ const Registros = () => {
     id: '',
     saved: false,  
   });
-
+  
   db.transaction(tx => {
     tx.executeSql('SELECT * FROM table_register', [], (tx, results) => {
       var temp = [];
@@ -31,58 +32,19 @@ const Registros = () => {
       }
       setList(temp);
     });
-  });  
+  });
   
   useEffect(() => {
     if(newId.saved){
-      db.transaction((tx)=> {
-        tx.executeSql(
-          'UPDATE table_register set register_identificador=? where register_id=?',
-          [newId.id, updateId],
-          (tx, results) => {
-            console.log('Results',results.rowsAffected);
-            if(results.rowsAffected>0){
-              Alert.alert( 'Successo', 'O registro foi atualizado',
-                [
-                  {text: 'Ok', onPress: () => setOpen(false)},
-                ],
-                { cancelable: false }
-              );
-            }else{
-              Alert.alert('Falha na atualização');
-            }
-          }
-        );
-      });              
+      updateRegister(newId.id,updateId);
+      setOpen(false)             
     }
   }, [newId])  
 
   useEffect(() => {
     if(deleteId){
-      db.transaction(tx => {
-        tx.executeSql(
-          'DELETE FROM  table_register where register_id=?',
-          [deleteId],
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-            if (results.rowsAffected > 0) {
-              Alert.alert(
-                'Successo',
-                'O registro foi excluído',
-                [
-                  {
-                    text: 'Ok',
-                    onPress: () => setUpdateId(null),
-                  },
-                ],
-                { cancelable: false }
-              );
-            } else {
-              Alert.alert('Falha na remoção');
-            }
-          }
-        );
-      });      
+      deleteRegister(deleteId);
+      setUpdateId(null);      
     }
   }, [deleteId])
   
