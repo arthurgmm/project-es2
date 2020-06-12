@@ -4,16 +4,14 @@ import { View,
          TextInput, 
          TouchableOpacity, 
          TouchableWithoutFeedback,
-         Keyboard, 
+         Keyboard,
          Alert, 
          StyleSheet 
         } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
-import { openDatabase } from 'react-native-sqlite-storage';
-
-var db = openDatabase({ name: 'RegistrosDatabase.db' });
+import { insertRegister } from './../../DataBase';
 
 const NovoRegistro = ({ navigation }) => {
   const [date, setDate] = useState(`${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()}`)
@@ -50,38 +48,14 @@ const NovoRegistro = ({ navigation }) => {
         setLatitude(JSON.stringify(pos.coords.latitude))
         setLongitude(JSON.stringify(pos.coords.longitude))
       },
-      (error) => alert(error.message),
-      { enableHighAccuracy: false, timeout: 5000 }
+      (error) => Alert.alert(error.message),
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );  
   }    
 
   useEffect(() => {
     if(registro.saved){
-      db.transaction(function(tx) {
-        tx.executeSql(
-          'INSERT INTO table_register (register_identificador, register_date, register_hour, register_lat, register_long) VALUES (?,?,?,?,?)',
-          [id, date, hour, latitude, longitude],
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-            if (results.rowsAffected > 0) {
-              Alert.alert(
-                'Successo',
-                'Registro feito com sucesso',
-                [
-                  {
-                    text: 'Ok',
-                    onPress: () =>
-                      navigation.navigate('Home'),
-                  },
-                ],
-                { cancelable: false }
-              );
-            } else {
-              alert('Falha no registro');
-            }
-          }
-        );
-      });          
+      insertRegister(id,date,hour,latitude,longitude,navigation);            
     }
   }, [registro])
 

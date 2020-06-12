@@ -1,26 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RNCamera } from 'react-native-camera';
-import Share from 'react-native-share';
 
 const Video = ({ navigation, route }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [capturedRecord, setCapturedRecord] = useState(null);
-  const [open, setOpen] = useState(null);
-  
-  const {id, date, hour, latitude, longitude } = route.params;
 
-  const onShare = () => {
-    const options = Platform.select({
-      android: {
-        message: `${id} registrado(a) na localização ${latitude}/${longitude} no dia ${date} às ${hour} horas.`,
-        url: capturedRecord.uri,
-      }
-    })
-    Share.open(options)
-  };
-  
   async function record(){
     if(camera) {
       if(!isRecording){
@@ -30,7 +16,6 @@ const Video = ({ navigation, route }) => {
       } else {
         setIsRecording(false);
         camera.stopRecording();
-        setOpen(true);
       }
     }
   };  
@@ -64,24 +49,10 @@ const Video = ({ navigation, route }) => {
       </RNCamera>
 
       { capturedRecord && 
-        <Modal
-          animationType='slide'
-          transparent={false}
-          visible={open}
-        >
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <TouchableOpacity style={styles.shareButton} onPress={onShare}>
-              <Text style={styles.shareText}>Compartilhar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.shareButton} onPress={() => {
-                                                                          setOpen(false)
-                                                                          navigation.goBack()
-                                                                        }}
-            >
-              <Text style={styles.shareText}>Cancelar</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
+        navigation.navigate('Compartilhar', {
+          register: route.params,
+          url: capturedRecord.uri, 
+        })
       }
       
     </View>
@@ -112,19 +83,6 @@ const styles = StyleSheet.create({
   recFalse: {
     color: '#FFF',
   },
-  shareButton: {
-    backgroundColor: '#21243D',
-    borderRadius: 20,
-    height: 45,
-    width: '80%',
-    marginBottom: 30,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  shareText: {
-    fontWeight: 'bold',
-    color: '#FFF'
-  }
 })
 
 export default Video;
