@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback,
-         Keyboard, Alert, StyleSheet } from 'react-native';
+import { View, 
+         Text, 
+         TextInput, 
+         TouchableOpacity, 
+         TouchableWithoutFeedback,
+         Keyboard,
+         Alert, 
+         StyleSheet 
+        } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Geolocation from '@react-native-community/geolocation';
-import { openDatabase } from 'react-native-sqlite-storage';
-
-var db = openDatabase({ name: 'RegistrosDatabase.db' });
+import Geolocation from 'react-native-geolocation-service';
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+import { insertRegister } from './../../DataBase';
 
 const NovoRegistro = ({ navigation }) => {
   const [date, setDate] = useState(`${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()}`)
@@ -24,43 +30,32 @@ const NovoRegistro = ({ navigation }) => {
   });
 
   useEffect(() => {
+    RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
+    .then(data => {
+      if (data === "already-enabled") {
+        findCoordinates()
+      } else {
+        setTimeout(() => {
+          findCoordinates()
+        }, 1000)
+      }
+    })    
+  }, []);
+  
+  findCoordinates = () => {
     Geolocation.getCurrentPosition(
       pos => {
         setLatitude(JSON.stringify(pos.coords.latitude))
         setLongitude(JSON.stringify(pos.coords.longitude))
       },
-      (error) => alert(error.message),
-      { enableHighAccuracy: false, timeout: 5000 }
+      (error) => Alert.alert(error.message),
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );  
-  }, []);
+  }    
 
   useEffect(() => {
     if(registro.saved){
-      db.transaction(function(tx) {
-        tx.executeSql(
-          'INSERT INTO table_register (register_identificador, register_date, register_hour, register_lat, register_long) VALUES (?,?,?,?,?)',
-          [id, date, hour, latitude, longitude],
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-            if (results.rowsAffected > 0) {
-              Alert.alert(
-                'Successo',
-                'Registro feito com sucesso',
-                [
-                  {
-                    text: 'Ok',
-                    onPress: () =>
-                      navigation.navigate('Home'),
-                  },
-                ],
-                { cancelable: false }
-              );
-            } else {
-              alert('Falha no registro');
-            }
-          }
-        );
-      });          
+      insertRegister(id,date,hour,latitude,longitude,navigation);            
     }
   }, [registro])
 
@@ -81,37 +76,37 @@ const NovoRegistro = ({ navigation }) => {
           <Text style={styles.title}>Novo Registro</Text>
         </View>
         <View style={styles.body}>
-          <View style={styles.registroInputs}>
+          <View style={styles.registroInput}>
             <TextInput 
               style={styles.input}
               onChangeText={(texto) => setId(texto)}
               value={id}
               placeholder='Identificador'
             />
-            <TextInput 
-              style={styles.input}
-              value={date}
-              editable={false}
-            />
-            <TextInput 
-              style={styles.input}
-              value={hour}
-              editable={false}
-            />
-            <TextInput 
-              style={styles.input}
-              value={`${latitude} (Latitude)`}
-              editable={false}
-            /> 
-            <TextInput 
-              style={styles.input}
-              value={`${longitude} (Longitude)`}
-              editable={false}
-            />     
-          </View>                               
+          </View>   
+          <View style={styles.registroInfos}>
+            <Text style={styles.infosText}>
+              <Text style={{fontWeight: 'bold'}}>Data:</Text> {date}
+            </Text>
+            <Text style={styles.infosText}>
+              <Text style={{fontWeight: 'bold'}}>Hora:</Text> {hour}
+            </Text>
+            <Text style={styles.infosText}>
+              <Text style={{fontWeight: 'bold'}}>Latitude:</Text> {latitude}
+            </Text>
+            <Text style={styles.infosText}>
+              <Text style={{fontWeight: 'bold'}}>Longitude:</Text> {longitude}
+            </Text>
+          </View>                                 
           <View style={styles.registroButtons}>
-            <TouchableOpacity onPress={navigateToVideo}>
-              <Icon name='video-camera' size={40} color='#21243D'/>
+            <TouchableOpacity style={styles.buttons} 
+                              onPress={navigateToVideo}
+            >
+              <Icon 
+                name='video-camera' 
+                size={30} color='#FFF'
+                style={styles.icon}
+              />
             </TouchableOpacity> 
             <TouchableOpacity onPress={() => {
                                               setRegistro({
@@ -122,8 +117,15 @@ const NovoRegistro = ({ navigation }) => {
                                                 longitude: longitude,
                                                 saved: true,      
                                               })
-            }}>
-              <Icon name='check' size={40} color='#21243D'/>
+                                      }}
+                              style={styles.buttons}
+            >
+              <Icon 
+                name='check' 
+                size={30} 
+                color='#FFF'
+                style={styles.icon}
+              />
             </TouchableOpacity>                                    
           </View>
         </View>
@@ -156,8 +158,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
-  registroInputs: {
-    flexDirection: 'column',
+  registroInput: {
     alignItems: 'center',
     width: '100%',
   },
@@ -172,14 +173,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAFAFA',
     fontSize: 20,    
   },
+  registroInfos: {
+    alignItems: 'flex-start',
+    width: '80%',
+  },
+  infosText: {
+    marginTop: 30,
+    fontSize: 20,
+  },
   registroButtons: {
     width: '100%',
-    height: '35%',
+    marginTop: 30,
     justifyContent: 'center',
     alignItems: 'center',   
-    flexDirection: 'row', 
-    justifyContent: 'space-around',
+    flexDirection: 'column', 
   },
+  buttons: {
+    backgroundColor: '#21243D',
+    borderRadius: 20,
+    height: 45,
+    width: '80%',
+    marginBottom: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 export default NovoRegistro;
