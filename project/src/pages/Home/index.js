@@ -20,8 +20,8 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
         <Text style={styles.title}>
-          Project
-          <Text style={{color: '#1076F7'}}>Name</Text>
+          Crowd
+          <Text style={{color: '#1076F7'}}>Vid</Text>
         </Text>
       <TouchableOpacity style={styles.homeButton} onPress={navigateToNovo}>
         <Text style={styles.buttonText}>Novo Registro</Text>
